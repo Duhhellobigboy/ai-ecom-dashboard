@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "6443672b-98ed-4ab0-9721-9faa65ad8910",
+    "terms": [
+      "boots"
+    ],
+    "timestamp": "2026-04-07T21:14:22.156Z",
+    "file_path": "data/exports/boots_2026-04-07T21-14-22-156Z.csv"
+  },
+  {
+    "id": "0be83c08-ada8-4312-b8d0-01dc55db8206",
+    "terms": [
+      "Wireless earbuds"
+    ],
+    "timestamp": "2026-04-07T21:09:16.091Z",
+    "file_path": "data/exports/wirelessearbuds_2026-04-07T21-09-16-090Z.csv"
+  },
+  {
+    "id": "54941170-6ead-41d0-a996-240c48e7aa39",
+    "terms": [
+      "sneakers"
+    ],
+    "timestamp": "2026-04-07T20:47:41.259Z",
+    "file_path": "data/exports/sneakers_2026-04-07T20-47-41-258Z.csv"
+  },
+  {
+    "id": "34ed28df-da06-45c2-bcdc-a5286a7a7d76",
+    "terms": [
+      "sneakers"
+    ],
+    "timestamp": "2026-04-07T20:30:07.565Z",
+    "file_path": "data/exports/sneakers_2026-04-07T20-30-07-564Z.csv"
+  },
+  {
+    "id": "a8b87238-2d43-4793-84a2-0385e9b4060f",
+    "terms": [
+      "dada"
+    ],
+    "timestamp": "2026-04-07T20:29:05.247Z",
+    "file_path": "data/exports/dada_2026-04-07T20-29-05-245Z.csv"
+  }
+]
