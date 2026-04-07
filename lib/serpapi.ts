@@ -1,5 +1,15 @@
 import { getJson } from "serpapi";
 import type { TrendsResponse } from "@/types/trends";
+import type { TimelineDataPoint } from "@/types/trends";
+
+export interface CompareTimeseriesOptions {
+  /** SerpAPI `date` param, e.g. `today 12-m`, `today 5-y`, `now 7-d` */
+  timeRange?: string;
+  /** Region code, e.g. `US`, or omit / empty for broad/default */
+  geo?: string;
+  /** Google Trends category id (string or number) */
+  category?: string | number;
+}
 
 function settled<T>(p: Promise<T>): Promise<T | null> {
   return p.catch((err) => {
@@ -60,4 +70,33 @@ export async function fetchTrends(terms: string[]): Promise<TrendsResponse> {
       top: relatedTopics?.top ?? [],
     },
   };
+}
+
+/**
+ * Lightweight compare fetch — TIMESERIES only (faster than full `fetchTrends`).
+ */
+export async function fetchCompareTimeseries(
+  keywords: string[],
+  options: CompareTimeseriesOptions = {},
+): Promise<TimelineDataPoint[]> {
+  const apiKey = process.env.SERP_API_KEY;
+  if (!apiKey) throw new Error("SERP_API_KEY is not set in environment.");
+
+  const params: Record<string, unknown> = {
+    engine: "google_trends",
+    q: keywords.join(","),
+    data_type: "TIMESERIES",
+    api_key: apiKey,
+  };
+
+  if (options.timeRange) params.date = options.timeRange;
+  if (options.geo !== undefined && options.geo.trim() !== "") {
+    params.geo = options.geo.trim();
+  }
+  if (options.category !== undefined && options.category !== "") {
+    params.cat = String(options.category);
+  }
+
+  const res = await getJson(params);
+  return (res?.interest_over_time?.timeline_data ?? []) as TimelineDataPoint[];
 }

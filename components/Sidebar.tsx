@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 function Icon({ d, className = "w-4 h-4" }: { d: string; className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
@@ -8,14 +11,19 @@ function Icon({ d, className = "w-4 h-4" }: { d: string; className?: string }) {
   );
 }
 
-const NAV_ITEMS = [
+type NavLinkItem = { label: string; href: "/" | "/compare-trends"; icon: string };
+type NavButtonItem = { label: string; icon: string };
+type NavItem = NavLinkItem | NavButtonItem;
+
+const NAV_ITEMS: NavItem[] = [
   {
     label: "Dashboard",
-    active: true,
+    href: "/",
     icon: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
   },
   {
     label: "Compare Trends",
+    href: "/compare-trends",
     icon: "M3 3v18h18M8 17l4-8 4 4 4-6",
   },
   {
@@ -37,6 +45,8 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="w-[240px] bg-zinc-900 border-r border-zinc-800/60 flex flex-col h-full shrink-0">
       {/* Logo */}
@@ -56,19 +66,30 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {NAV_ITEMS.map((item) => (
-          <button
-            key={item.label}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
-              item.active
-                ? "bg-violet-600/15 text-violet-400 border-l-2 border-violet-500 pl-[10px]"
-                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60 border-l-2 border-transparent"
-            }`}
-          >
-            <Icon d={item.icon} className="w-4 h-4 shrink-0" />
-            {item.label}
-          </button>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          const active = "href" in item && item.href === pathname;
+          const className = `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all border-l-2 ${
+            active
+              ? "bg-violet-600/15 text-violet-400 border-violet-500 pl-[10px]"
+              : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60 border-transparent"
+          }`;
+
+          if ("href" in item) {
+            return (
+              <Link key={item.label} href={item.href} className={className}>
+                <Icon d={item.icon} className="w-4 h-4 shrink-0" />
+                {item.label}
+              </Link>
+            );
+          }
+
+          return (
+            <button key={item.label} type="button" className={className}>
+              <Icon d={item.icon} className="w-4 h-4 shrink-0" />
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
       {/* Footer */}
