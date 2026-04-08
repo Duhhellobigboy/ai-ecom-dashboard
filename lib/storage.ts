@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { HistoryEntry } from "@/types/trends";
+import { isLocalFilePersistenceEnabled } from "@/lib/env";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const HISTORY_FILE = path.join(DATA_DIR, "history.json");
@@ -12,6 +13,10 @@ function ensureDirs() {
 }
 
 export function readHistory(): HistoryEntry[] {
+  if (!isLocalFilePersistenceEnabled()) {
+    return [];
+  }
+
   ensureDirs();
   if (!fs.existsSync(HISTORY_FILE)) return [];
   try {
@@ -22,6 +27,10 @@ export function readHistory(): HistoryEntry[] {
 }
 
 export function saveHistory(entry: HistoryEntry): void {
+  if (!isLocalFilePersistenceEnabled()) {
+    return;
+  }
+
   ensureDirs();
   const history = readHistory();
   history.unshift(entry);

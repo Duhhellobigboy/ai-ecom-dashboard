@@ -1,8 +1,13 @@
 import fs from "fs";
 import path from "path";
 import type { TrendsResponse } from "@/types/trends";
+import { isLocalFilePersistenceEnabled } from "@/lib/env";
 
-export function saveTrendsToCSV(data: TrendsResponse): string {
+export function saveTrendsToCSV(data: TrendsResponse): string | null {
+  if (!isLocalFilePersistenceEnabled()) {
+    return null;
+  }
+
   const exportsDir = path.join(process.cwd(), "data", "exports");
   if (!fs.existsSync(exportsDir)) fs.mkdirSync(exportsDir, { recursive: true });
 

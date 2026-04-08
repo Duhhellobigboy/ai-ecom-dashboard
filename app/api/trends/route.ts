@@ -23,12 +23,14 @@ export async function POST(req: NextRequest) {
   try {
     const data = await fetchTrends(terms);
     const filePath = saveTrendsToCSV(data);
-    saveHistory({
-      id: randomUUID(),
-      terms,
-      timestamp: new Date().toISOString(),
-      file_path: filePath,
-    });
+    if (filePath) {
+      saveHistory({
+        id: randomUUID(),
+        terms,
+        timestamp: new Date().toISOString(),
+        file_path: filePath,
+      });
+    }
     return NextResponse.json(data);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "SerpAPI error";
