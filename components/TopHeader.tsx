@@ -1,17 +1,24 @@
 "use client";
 
 interface Props {
-  loading: boolean;
-  onRefresh: () => void;
+  loading?: boolean;
+  onRefresh?: () => void;
+  title?: string;
+  subtitle?: string;
 }
 
-export default function TopHeader({ loading, onRefresh }: Props) {
+export default function TopHeader({
+  loading = false,
+  onRefresh,
+  title = "Product Trend Analysis",
+  subtitle = "Compare product demand, regions, and AI-generated insights",
+}: Props) {
   return (
     <header className="h-[60px] bg-zinc-900/80 border-b border-zinc-800/60 flex items-center justify-between px-6 shrink-0 backdrop-blur-sm">
       {/* Left: title */}
       <div>
-        <h1 className="text-sm font-semibold text-zinc-100 leading-none">Product Trend Analysis</h1>
-        <p className="text-xs text-zinc-500 mt-0.5">Compare product demand, regions, and AI-generated insights</p>
+        <h1 className="text-sm font-semibold text-zinc-100 leading-none">{title}</h1>
+        <p className="text-xs text-zinc-500 mt-0.5">{subtitle}</p>
       </div>
 
       {/* Right: actions */}
@@ -36,25 +43,27 @@ export default function TopHeader({ loading, onRefresh }: Props) {
         </button>
 
         {/* Refresh */}
-        <button
-          onClick={onRefresh}
-          disabled={loading}
-          title="Refresh"
-          className="flex items-center justify-center w-8 h-8 rounded-lg border border-zinc-700/60 bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors disabled:opacity-40"
-        >
-          <svg
-            className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {onRefresh && (
+          <button
+            onClick={onRefresh}
+            disabled={loading}
+            title="Refresh"
+            className="flex items-center justify-center w-8 h-8 rounded-lg border border-zinc-700/60 bg-zinc-800/50 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-colors disabled:opacity-40"
           >
-            <path d="M23 4v6h-6M1 20v-6h6" />
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-          </svg>
-        </button>
+            <svg
+              className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M23 4v6h-6M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+          </button>
+        )}
 
         {/* Source badge */}
         <span className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-600/10 border border-violet-600/20 text-xs text-violet-400">
